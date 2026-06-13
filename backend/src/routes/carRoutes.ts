@@ -5,17 +5,17 @@ import {
     createCar,
     updateCar,
     deleteCar
-} from "../controllers/carController";
+} from "../controllers/carController.ts";
 
-const router = express.Router();
+const userRouter = express.Router();
 
-router.route('/')
+userRouter.route('/')
     .get(getAllCars)
     .post(createCar)
     .patch(updateCar)
     .delete(deleteCar);
 
-router.route("/:id")
+userRouter.route("/:id")
     .get(getCarById);
 
-export { router };
+export default userRouter;
