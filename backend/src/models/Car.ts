@@ -1,10 +1,10 @@
 export interface Car {
-    id: Number;
-    make: String;
-    model: String;
-    body: "SUV" | "Hatchback" | "Wagon" | "Truck" | "Crossover" | "Coupe";
-    year: Number,
-    color: String,
+    id: number;
+    make: string;
+    model: string;
+    body: "SUV" | "Sedan" | "Hatchback" | "Wagon" | "Truck" | "Crossover" | "Coupe";
+    year: number;
+    color: string;
     fuel: "Gasoline" | "Electric" | "Diesel" | "Hybrid";
     transmission: "Single Speed" | "Automatic" | "Manual" | "CVT";
 };
