@@ -28,7 +28,7 @@ const findById = (id: number) : Car | undefined => {
 const create = (carData: Omit<Car, "id">): Car => {
     const db = readDb();
 
-    const nextId : number = db.cars.reduce((max : number, car: Car) => Math.max(max, car.id), 0) + 1;
+    const nextId : number = db.cars.reduce((max : number, car: Car) => Math.max(max, car.id), 1) + 1;
 
     const newCar : Car = { id: nextId, ...carData };
 
