@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { fileURLToPath } from "url"
 import path from "path";
-import type { Car } from "../models/Car.ts";
+import type { Car } from "../models/Car.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = path.resolve(__dirname, "../../../db.json");

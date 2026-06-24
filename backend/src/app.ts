@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from "express";
-import userRouter from "./routes/carRoutes.ts";
-import errorHandler from "./middleware/errorHandler.ts";
+import userRouter from "./routes/carRoutes.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 const app: Application = express();
 

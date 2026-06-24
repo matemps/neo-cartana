@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import type { Car } from "../models/Car.ts";
-import * as carRepo from "../repositories/carRepository.ts";
+import type { Car } from "../models/Car.js";
+import * as carRepo from "../repositories/carRepository.js";
 
 
 const getAllCars = async (_req: Request, res: Response, next: NextFunction) : Promise<void> => {

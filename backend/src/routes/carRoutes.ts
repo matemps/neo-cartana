@@ -5,7 +5,7 @@ import {
     createCar,
     updateCar,
     deleteCar
-} from "../controllers/carController.ts";
+} from "../controllers/carController.js";
 
 const userRouter = express.Router();
 
