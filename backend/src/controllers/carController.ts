@@ -1,82 +1,92 @@
-import { Request, Response } from "express";
-import { Car } from "../models/Car";
+import { Request, Response, NextFunction } from "express";
+import type { Car } from "../models/Car.ts";
+import * as carRepo from "../repositories/carRepository.ts";
 
-const getAllCars = async (res: Response) => {
-    // Get all cars from db
 
-    // If no cars return response
-
-    // return cars
+const getAllCars = async (_req: Request, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const cars = carRepo.findAll();
+        res.status(200).json({ data: cars });
+    } catch (err) {
+        next(err);
+    }
 };
 
-const getCarById = async (req: Request<{ id: Number }>, res: Response) => {
-    const id = req.params.id;
+const getCarById = async (req: Request<{ id: number }>, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const id : number = req.params.id;
 
-    // Find car by id
+        const car = carRepo.findById(id);
 
-    // If no car is found, return response
+        if (!car) {
+            res.status(404).json({ message: `Car with id ${id} not found.` });
+            return;
+        }
 
-    // Return car
+        res.status(200).json({ data: car });
+    } catch (err) {
+        next(err);
+    }
 };
 
-const createCar = async (req: Request<{}, {}, Omit<Car, "id">>, res: Response) => {
-    const {
-        make,
-        model,
-        body,
-        year,
-        color,
-        fuel,
-        transmission
-    } = req.body;
+const createCar = async (req: Request<{}, {}, Omit<Car, "id">>, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const {
+            make,
+            model,
+            body,
+            year,
+            color,
+            fuel,
+            transmission
+        } = req.body;
 
-    const car : Car = {
-        id: 0,
-        make: make,
-        model: model,
-        body: body,
-        year: year,
-        color: color,
-        fuel: fuel,
-        transmission: transmission
-    };
+        const newCar = carRepo.create({ 
+                make, 
+                model, 
+                body, 
+                year, 
+                color, 
+                fuel, 
+                transmission
+            });
 
-    // create car
-
-    // return response
+        res.status(201).json({ data: newCar });
+    } catch (err) {
+        next(err);
+    }
 };
 
-const updateCar = async (req: Request<{}, {}, Car>, res: Response) => {
-    const {
-        id,
-        make,
-        model,
-        body,
-        year,
-        color,
-        fuel,
-        transmission
-    } = req.body;
+const updateCar = async (req: Request<{}, {}, { id: number, updates: Partial<Omit<Car, "id">>}>, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { id, updates } = req.body;
 
-    // Find car by id
+        const updated = carRepo.update(id, updates )
+        if (!updated) {
+            res.status(404).json({ message: `Car with id ${id} not found.` });
+            return;
+        }
 
-    // If no car is found, return response
-
-    // update car
-
-    // return response
+        res.status(200).json({ data: updated });
+    } catch (err) {
+        next(err);
+    }
 };
 
-const deleteCar = async (req: Request<{}, {}, { id: Number }>, res: Response) => {
-    const { id } = req.body;
+const deleteCar = async (req: Request<{}, {}, { id: number }>, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const id : number = req.body.id;
 
-    // Find car by id
+        const deleted = carRepo.remove(id);
+        if (!deleted) {
+            res.status(404).json({ message: `Car with id ${id} not found.` });
+            return;
+        }
 
-    // If no car is found, return response
-
-    // delete car
-
-    // return response
+        res.status(200).json({ message: `Car with id ${id} deleted.` });
+    } catch (err) {
+        next(err);
+    }
 };
 
 export { getAllCars, getCarById, createCar, updateCar, deleteCar };
