@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import request from "supertest";
-import app from "../app.js";
-import type { Car } from "../models/Car.js";
+import app from "../src/app.js";
+import type { Car } from "../src/models/Car.js";
 
-vi.mock("../repositories/carRepository.js", () => ({
+vi.mock("../src/repositories/carRepository.js", () => ({
     findAll: vi.fn(),
     findById: vi.fn(),
     create: vi.fn(),
@@ -11,7 +11,7 @@ vi.mock("../repositories/carRepository.js", () => ({
     remove: vi.fn(),
 }));
 
-import * as carRepo from "../repositories/carRepository.js";
+import * as carRepo from "../src/repositories/carRepository.js";
 
 const mockCar: Car = {
     id: 1,
