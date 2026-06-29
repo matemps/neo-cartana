@@ -1,6 +1,6 @@
 import express from "express";
 import { 
-    getAllCars,
+    getCars,
     getCarById,
     createCar,
     updateCar,
@@ -10,7 +10,7 @@ import {
 const userRouter = express.Router();
 
 userRouter.route('/')
-    .get(getAllCars)
+    .get(getCars)
     .post(createCar)
     .patch(updateCar)
     .delete(deleteCar);

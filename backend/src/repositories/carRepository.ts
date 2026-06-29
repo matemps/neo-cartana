@@ -21,6 +21,12 @@ const findAll = () : Car[] => {
     return readDb().cars;
 };
 
+const find = (start: number, count: number) : Car[] => {
+    const cars = readDb().cars.slice(start, start + count);
+
+    return cars;
+}
+
 const findById = (id: number) : Car | undefined => {
     return readDb().cars.find(car => car.id === id);
 };
@@ -65,4 +71,8 @@ const remove = (id: number) : boolean => {
     return true;
 };
 
-export { findAll, findById, create, update, remove };
+const count = () : number => {
+    return readDb().cars.length;
+};
+
+export { findAll, find, findById, create, update, remove, count };

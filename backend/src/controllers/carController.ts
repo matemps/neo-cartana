@@ -3,10 +3,18 @@ import type { Car } from "../models/Car.js";
 import * as carRepo from "../repositories/carRepository.js";
 
 
-const getAllCars = async (_req: Request, res: Response, next: NextFunction) : Promise<void> => {
+const getCars = async (req: Request<{}, {}, {}, { start: string, count: string}>, res: Response, next: NextFunction) : Promise<void> => {
     try {
+        // to do: validation must be done here
+
+        const start = Number(req.query.start);
+        const count = Number(req.query.count);
+
         const cars = carRepo.findAll();
-        res.status(200).json({ data: cars });
+        const totalNumberOfCars = cars.length;
+
+        const slice = cars.slice(start, start + count);
+        res.status(200).json({ data: { slice: slice, totalNumberOfCars: totalNumberOfCars } });
     } catch (err) {
         next(err);
     }
@@ -89,4 +97,4 @@ const deleteCar = async (req: Request<{}, {}, { id: number }>, res: Response, ne
     }
 };
 
-export { getAllCars, getCarById, createCar, updateCar, deleteCar };
+export { getCars, getCarById, createCar, updateCar, deleteCar };

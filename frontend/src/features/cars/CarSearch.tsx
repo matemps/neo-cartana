@@ -5,22 +5,13 @@ import Pagination from "../../components/Pagination";
 
 const CARS_PER_PAGE = 30;
 
-interface Car {
-    id: number;
-    make: string;
-    model: string;
-    body: "SUV" | "Sedan" | "Hatchback" | "Wagon" | "Truck" | "Crossover" | "Coupe";
-    year: number;
-    color: string;
-    fuel: "Gasoline" | "Electric" | "Diesel" | "Hybrid";
-    transmission: "Single Speed" | "Automatic" | "Manual" | "CVT";
-};
-
 
 const CarSearch = () => {
-    const [page, setPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
     
-    const { data, isLoading, isSuccess, error } = useGetCarsQuery(null);
+    const { data, isLoading, isSuccess, error } = useGetCarsQuery(
+        { start: (currentPage -1) * CARS_PER_PAGE, count: CARS_PER_PAGE }
+    );
 
     let content : React.JSX.Element = <></>;
 
@@ -37,13 +28,13 @@ const CarSearch = () => {
             </div>
         );
         
-        if (data.data.length) {
-            const totalPages : number = Math.ceil(data.data.length / CARS_PER_PAGE);
+        if (data.data.slice.length) {
+            const totalPages : number = Math.ceil(data.data.totalNumberOfCars / CARS_PER_PAGE);
 
             content = (
                 <>
                     <div>
-                        {data.data.map((car: Car) => (
+                        {data.data.slice.map((car) => (
                             <div key={car.id}>
                                 <div>
                                     <h3>{car.year} {car.make} {car.model}</h3>
@@ -62,8 +53,8 @@ const CarSearch = () => {
 
                     <div>
                         <Pagination
-                            currentPage={page}
-                            onPageChange={(e) => setPage(e.selected)}
+                            currentPage={currentPage}
+                            onPageChange={(e) => setCurrentPage(e.selected)}
                             totalPages={totalPages}
                         />
                     </div>
