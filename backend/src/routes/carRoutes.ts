@@ -7,15 +7,15 @@ import {
     deleteCar
 } from "../controllers/carController.js";
 
-const userRouter = express.Router();
+const carRouter = express.Router();
 
-userRouter.route('/')
+carRouter.route('/')
     .get(getCars)
     .post(createCar)
     .patch(updateCar)
     .delete(deleteCar);
 
-userRouter.route("/:id")
+carRouter.route("/:id")
     .get(getCarById);
 
-export default userRouter;
+export default carRouter;
