@@ -7,7 +7,7 @@ const VALID_FUELS: Car["fuel"][] = ["Gasoline", "Electric", "Diesel", "Hybrid"];
 const VALID_TRANSMISSIONS: Car["transmission"][] = ["Single Speed", "Automatic", "Manual", "CVT"];
 
 
-const getCars = async (req: Request<{}, {}, {}, { start: string, count: string}>, res: Response, next: NextFunction) : Promise<void> => {
+const getCars = (req: Request<{}, {}, {}, { start: string, count: string}>, res: Response, next: NextFunction) => {
     try {
         const start = Number(req.query.start);
         const count = Number(req.query.count);
@@ -37,7 +37,7 @@ const getCars = async (req: Request<{}, {}, {}, { start: string, count: string}>
     }
 };
 
-const getCarById = async (req: Request<{ id: string }>, res: Response, next: NextFunction) : Promise<void> => {
+const getCarById = (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     try {
         const id = Number(req.params.id);
 
@@ -59,7 +59,7 @@ const getCarById = async (req: Request<{ id: string }>, res: Response, next: Nex
     }
 };
 
-const createCar = async (req: Request<{}, {}, Omit<Car, "id">>, res: Response, next: NextFunction) : Promise<void> => {
+const createCar = (req: Request<{}, {}, Omit<Car, "id">>, res: Response, next: NextFunction) => {
     try {
         const {
             make,
@@ -127,7 +127,7 @@ const createCar = async (req: Request<{}, {}, Omit<Car, "id">>, res: Response, n
     }
 };
 
-const updateCar = async (req: Request<{}, {}, { id: number, updates: Partial<Omit<Car, "id">>}>, res: Response, next: NextFunction) : Promise<void> => {
+const updateCar = (req: Request<{}, {}, { id: number, updates: Partial<Omit<Car, "id">>}>, res: Response, next: NextFunction) => {
     try {
         const { id, updates } = req.body;
 
@@ -200,7 +200,7 @@ const updateCar = async (req: Request<{}, {}, { id: number, updates: Partial<Omi
     }
 };
 
-const deleteCar = async (req: Request<{}, {}, { id: number }>, res: Response, next: NextFunction) : Promise<void> => {
+const deleteCar = (req: Request<{}, {}, { id: number }>, res: Response, next: NextFunction) => {
     try {
         const id: number = req.body.id;
 
