@@ -1,4 +1,4 @@
-type Car = {
+interface Car {
     id: number;
     make: string;
     model: string;

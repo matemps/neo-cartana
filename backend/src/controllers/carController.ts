@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import type Car from "../models/Car.js";
+import Car from "../models/Car.js";
 import * as carRepo from "../repositories/carRepository.js";
 
 const VALID_BODIES: Car["body"][] = ["SUV", "Sedan", "Hatchback", "Wagon", "Truck", "Crossover", "Coupe"];
