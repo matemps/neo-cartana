@@ -1,4 +1,4 @@
-export interface Car {
+type Car = {
     id: number;
     make: string;
     model: string;
@@ -8,3 +8,5 @@ export interface Car {
     fuel: "Gasoline" | "Electric" | "Diesel" | "Hybrid";
     transmission: "Single Speed" | "Automatic" | "Manual" | "CVT";
 };
+
+export default Car;

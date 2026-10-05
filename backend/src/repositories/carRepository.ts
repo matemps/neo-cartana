@@ -1,19 +1,16 @@
 import { readFileSync, writeFileSync } from "fs";
 import { fileURLToPath } from "url"
 import path from "path";
-import type { Car } from "../models/Car.js";
+import type Car from "../models/Car.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = path.resolve(__dirname, "../../../../db.json");
 
-type DbData = { cars: Car[] };
-
-
-const readDb = () : DbData => {
+const readDb = () : { cars: Car[] } => {
     return JSON.parse(readFileSync(DB_PATH, "utf-8"));
 };
 
-const writeDb = (data: DbData): void => {
+const writeDb = (data: { cars: Car[] }): void => {
     writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
 };
 

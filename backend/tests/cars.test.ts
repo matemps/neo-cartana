@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import request from "supertest";
 import app from "../src/app.js";
-import type { Car } from "../src/models/Car.js";
+import type Car from "../src/models/Car.js";
 
 vi.mock("../src/repositories/carRepository.js", () => ({
     findAll: vi.fn(),
