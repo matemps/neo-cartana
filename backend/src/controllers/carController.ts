@@ -96,17 +96,17 @@ const createCar = (req: Request<{}, {}, Omit<Car, "id">>, res: Response, next: N
             return;
         }
 
-        if (!(VALID_BODIES as string[]).includes(body)) {
+        if (!(VALID_BODIES).includes(body)) {
             res.status(400).json({ message: `'body' must be one of: ${VALID_BODIES.join(", ")}.` });
             return;
         }
 
-        if (!(VALID_FUELS as string[]).includes(fuel)) {
+        if (!(VALID_FUELS).includes(fuel)) {
             res.status(400).json({ message: `'fuel' must be one of: ${VALID_FUELS.join(", ")}.` });
             return;
         }
 
-        if (!(VALID_TRANSMISSIONS as string[]).includes(transmission)) {
+        if (!(VALID_TRANSMISSIONS).includes(transmission)) {
             res.status(400).json({ message: `'transmission' must be one of: ${VALID_TRANSMISSIONS.join(", ")}.` });
             return;
         }
@@ -173,17 +173,17 @@ const updateCar = (req: Request<{}, {}, { id: number, updates: Partial<Omit<Car,
             return;
         }
 
-        if (updates.body !== undefined && !(VALID_BODIES as string[]).includes(updates.body)) {
+        if (updates.body !== undefined && !(VALID_BODIES).includes(updates.body)) {
             res.status(400).json({ message: `'body' must be one of: ${VALID_BODIES.join(", ")}.` });
             return;
         }
 
-        if (updates.fuel !== undefined && !(VALID_FUELS as string[]).includes(updates.fuel)) {
+        if (updates.fuel !== undefined && !(VALID_FUELS).includes(updates.fuel)) {
             res.status(400).json({ message: `'fuel' must be one of: ${VALID_FUELS.join(", ")}.` });
             return;
         }
 
-        if (updates.transmission !== undefined && !(VALID_TRANSMISSIONS as string[]).includes(updates.transmission)) {
+        if (updates.transmission !== undefined && !(VALID_TRANSMISSIONS).includes(updates.transmission)) {
             res.status(400).json({ message: `'transmission' must be one of: ${VALID_TRANSMISSIONS.join(", ")}.` });
             return;
         }
