@@ -7,3 +7,7 @@ backend/dist/
 
 # frontend build
 frontend/dist/
+
+# db
+db.sqlite-shm
+db.sqlite-wal
