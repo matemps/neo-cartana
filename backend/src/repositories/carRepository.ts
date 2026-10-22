@@ -1,75 +1,85 @@
-import { readFileSync, writeFileSync } from "fs";
-import { fileURLToPath } from "url"
-import path from "path";
+import db from "../config/dbConn.js";
 import Car from "../models/Car.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DB_PATH = path.resolve(__dirname, "../../../../db.json");
-
-const readDb = () : { cars: Car[] } => {
-    return JSON.parse(readFileSync(DB_PATH, "utf-8"));
-};
-
-const writeDb = (data: { cars: Car[] }): void => {
-    writeFileSync(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
-};
 
 const findAll = () : Car[] => {
-    return readDb().cars;
+    try {
+        const cars : Car[] = db.prepare<{}, Car>("SELECT * FROM Cars").all({});
+
+        return cars;
+    } catch (err) {
+        throw err;
+    }
 };
 
 const find = (start: number, count: number) : Car[] => {
-    const cars = readDb().cars.slice(start, start + count);
+    try {
+        const cars : Car[] = db.prepare<{ offset: number, limit: number }, Car>("SELECT * FROM Cars ORDER BY id DESC LIMIT @limit OFFSET @offset").all({ offset: start, limit: count });
 
-    return cars;
+        return cars;
+    } catch (err) {
+        throw err;
+    }
 }
 
 const findById = (id: number) : Car | undefined => {
-    return readDb().cars.find(car => car.id === id);
+    try {
+        const car : Car | undefined = db.prepare<{ id: number; }, Car>("SELECT * FROM Cars WHERE id = @id").get({ id });
+
+        return car;
+    } catch (err) {
+        throw err;
+    }
 };
 
-const create = (carData: Omit<Car, "id">): Car => {
-    const db = readDb();
-
-    const nextId : number = db.cars.reduce((max : number, car: Car) => Math.max(max, car.id), 1) + 1;
-
-    const newCar : Car = { id: nextId, ...carData };
-
-    db.cars.push(newCar);
-
-    writeDb(db);
-
-    return newCar;
+const create = (carData: Omit<Car, "id">) : Car | undefined => {
+    try {
+        const newCar = db.prepare<Omit<Car, "id">, Car>("INSERT INTO Cars (make, model, body, year, color, fuel, transmission) VALUES (@make, @model, @body, @year, @color, @fuel, @transmission) RETURNING *").get({ ...carData });
+        
+        return newCar;
+    } catch (err) {
+        throw err;
+    }
 };
 
-const update = (id: number, updates: Partial<Omit<Car, "id">>): Car | undefined => {
-    const db = readDb();
+const update = (id: number, updates: Partial<Omit<Car, "id">>) : Car | undefined => {
+    try {
+        const updatedCar = db.prepare<{ [K in keyof Omit<Car, "id">]: Car[K] | null } & { id: number }, Car>(`
+            UPDATE Cars SET
+                make = COALESCE(@make, make),
+                model = COALESCE(@model, model),
+                body = COALESCE(@body, body),
+                year = COALESCE(@year, year),
+                color = COALESCE(@color, color),
+                fuel = COALESCE(@fuel, fuel),
+                transmission = COALESCE(@transmission, transmission)
+            WHERE id = @id
+            RETURNING *
+        `).get({
+            id,
+            make: updates.make ?? null,
+            model: updates.model ?? null,
+            body: updates.body ?? null,
+            year: updates.year ?? null,
+            color: updates.color ?? null,
+            fuel: updates.fuel ?? null,
+            transmission: updates.transmission ?? null
+        });
 
-    const index : number = db.cars.findIndex(c => c.id === id);
-    if (index === -1) return undefined;
-
-    db.cars[index] = { ...db.cars[index], ...updates };
-
-    writeDb(db);
-
-    return db.cars[index];
+        return updatedCar;
+    } catch (err) {
+        throw err;
+    }
 };
 
 const remove = (id: number) : boolean => {
-    const db = readDb();
+    try {
+        const result = db.prepare<{ id: number }>("DELETE FROM Cars WHERE id = @id").run({ id });
 
-    const index : number = db.cars.findIndex(car => car.id === id);
-    if (index === -1) return false;
-
-    db.cars.splice(index, 1);
-
-    writeDb(db);
-
-    return true;
+        return result.changes !== 0;
+    } catch (err) {
+        throw err;
+    }
 };
 
-const count = () : number => {
-    return readDb().cars.length;
-};
-
-export { findAll, find, findById, create, update, remove, count };
+export { findAll, find, findById, create, update, remove };

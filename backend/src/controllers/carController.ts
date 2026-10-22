@@ -27,7 +27,7 @@ const getCars = (req: Request<{}, {}, {}, { start: string, count: string}>, res:
             return;
         }
 
-        const cars = carRepo.findAll();
+        const cars : Car[] = carRepo.findAll();
         const totalNumberOfCars = cars.length;
 
         const slice = cars.slice(start, start + count);
@@ -46,7 +46,7 @@ const getCarById = (req: Request<{ id: string }>, res: Response, next: NextFunct
             return;
         }
 
-        const car = carRepo.findById(id);
+        const car : Car | undefined = carRepo.findById(id);
 
         if (!car) {
             res.status(404).json({ message: `Car with id ${id} not found.` });
@@ -111,7 +111,7 @@ const createCar = (req: Request<{}, {}, Omit<Car, "id">>, res: Response, next: N
             return;
         }
 
-        const newCar = carRepo.create({
+        const newCar : Car | undefined = carRepo.create({
                 make, 
                 model, 
                 body, 
@@ -188,7 +188,7 @@ const updateCar = (req: Request<{}, {}, { id: number, updates: Partial<Omit<Car,
             return;
         }
 
-        const updated = carRepo.update(id, updates)
+        const updated : Car | undefined = carRepo.update(id, updates)
         if (!updated) {
             res.status(404).json({ message: `Car with id ${id} not found.` });
             return;
